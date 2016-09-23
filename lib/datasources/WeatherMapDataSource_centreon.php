@@ -11,14 +11,8 @@ class WeatherMapDataSource_centreon extends WeatherMapDataSource {
         var $login = "root";
         var $password = "";
 
-        var $host = "";
-        var $service = "";
-        var $results = array();
-
-
         function Init(&$map)
         {
-
                 return(TRUE);
         }
 
@@ -41,25 +35,29 @@ class WeatherMapDataSource_centreon extends WeatherMapDataSource {
 
         function ReadData($targetstring, &$map, &$item)
         {
-
-                $mysqli = new mysqli($this->server, $this->login, $this->password, $this->database);
-
-                $result = $mysqli->query('
-                select *
-                from metrics as m,
-                index_data as i
-                where m.index_id = i.id
-                and i.host_name like "%'.$this->host.'%"
-                and i.service_description like "%'.$this->service.'%"');
-                
                 $value = array();
-                while($row = mysqli_fetch_object($result)) {
-                  $value[$row->metric_name] = $row->current_value;
+                $value["traffic_in"] = NULL;
+                $value["traffic_out"] = NULL;
+
+                if(preg_match("/^centreon:(\S+):(\S+)$/",$targetstring,$matches))
+                {
+                        $mysqli = new mysqli($this->server, $this->login, $this->password, $this->database);
+
+                        $result = $mysqli->query('
+                        select *
+                        from metrics as m,
+                        index_data as i
+                        where m.index_id = i.id
+                        and i.host_name = "'.$matches[1].'"
+                        and i.service_description = "'.$matches[2].'"');
+
+                        while($row = mysqli_fetch_object($result)) {
+                                $value[$row->metric_name] = $row->current_value;
+                        }
                 }
 
                 $data_time = 0;
                 return( array($value["traffic_in"], $value["traffic_out"], $data_time) );
-
         }
 }
 

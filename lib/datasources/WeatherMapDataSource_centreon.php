@@ -23,8 +23,6 @@ class WeatherMapDataSource_centreon extends WeatherMapDataSource {
         {
                 if(preg_match("/^centreon:(\S+):(\S+)$/",$targetstring,$matches))
                 {
-                        $this->host = $matches[1];
-                        $this->service = $matches[2];
                         return TRUE;
                 }
                 else

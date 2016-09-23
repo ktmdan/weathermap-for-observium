@@ -2,7 +2,7 @@
 // Pluggable datasource for PHP Weathermap 0.9
 // - return current_value of traffic_in and traffic_out
 
-// TARGET fping:host:service
+// TARGET centreon:host:service
 
 class WeatherMapDataSource_centreon extends WeatherMapDataSource {
 

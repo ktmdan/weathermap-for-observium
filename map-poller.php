@@ -49,12 +49,13 @@ if (isset($options['d']))
 #  ini_set('error_reporting', 0);
 }
 
-
-include("../../includes/defaults.inc.php");
-include("../../config.php");
-include("../../includes/definitions.inc.php");
-include("../../includes/functions.php");
-include("../../includes/polling/functions.inc.php");
+#not needed items2
+#include("../../includes/defaults.inc.php");
+#include("../../config.php");
+#include("../../includes/db.inc.php");
+#include("../../includes/definitions.inc.php");
+#include("../../includes/functions.php");
+#include("../../includes/polling/functions.inc.php");
 
 $cli = TRUE;
 
@@ -67,13 +68,13 @@ if(is_dir($conf_dir)) {
 		while (($file = readdir($dh)) !== false) {
 			if( "." != $file && ".." != $file && ".htaccess" != $file && "index.php" != $file){
 				if ($debug) { echo "File to be run is $file\n"; }
-				if ($config['rrdcached']) {
-					$cmd = "php ./weathermap --config $conf_dir/$file --base-href $weathermap_url --daemon ".$config['rrdcached'];
-					if ($debug) { echo "Running with rrdcached $cmd\n"; }
-				} else {
+#				if ($config['rrdcached']) {
+#					$cmd = "php ./weathermap --config $conf_dir/$file --base-href $weathermap_url --daemon ".$config['rrdcached'];
+#					if ($debug) { echo "Running with rrdcached $cmd\n"; }
+#				} else {
 					$cmd = "php ./weathermap --config $conf_dir/$file --base-href $weathermap_url";
 					if ($debug) { echo "Running $cmd\n"; }
-				}
+#				}
 				$fp = popen($cmd, 'r'); 
 				$read = fread($fp, 1024);
 				echo $read;
